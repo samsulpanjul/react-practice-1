@@ -3,7 +3,7 @@ import Auth from "../components/layouts/Auth";
 
 export default function Login() {
   return (
-    <Auth title="Login">
+    <Auth title="Login" type="login">
       <FormLogin />
     </Auth>
   );
