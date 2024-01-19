@@ -1,7 +1,7 @@
 import Button from "../elements/button/Button";
 
 export default function CardProduct({ children }) {
-  return <div className="w-full max-w-xs p-3 shadow border border-slate-400 rounded bg-white flex flex-col justify-center gap-3">{children}</div>;
+  return <div className="w-full max-w-xs p-3 shadow border border-slate-400 rounded bg-white flex flex-col justify-between gap-3">{children}</div>;
 }
 
 CardProduct.Header = Header;
@@ -16,11 +16,11 @@ function Header({ image }) {
   );
 }
 
-function Body({ title, children }) {
+function Body({ name, children }) {
   return (
-    <div>
+    <div className="h-full">
       <a href="#">
-        <h5 className="text-gray-900 text-lg font-semibold">{title}</h5>
+        <h5 className="text-gray-900 text-lg font-semibold">{name}</h5>
         <p>{children}</p>
       </a>
     </div>
