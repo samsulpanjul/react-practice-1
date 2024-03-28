@@ -27,11 +27,13 @@ function Body({ name, children }) {
   );
 }
 
-function Footer({ price }) {
+function Footer({ price, handleAddToCart, id }) {
   return (
     <div className="flex justify-between items-center">
-      <p className="text-gray-900 text-lg font-semibold">{price}</p>
-      <Button classname={"bg-gray-900"}>Add to cart</Button>
+      <p className="text-gray-900 text-lg font-semibold">Rp. {price.toLocaleString("id-ID", { styles: "currency", currency: "IDR" })}</p>
+      <Button classname={"bg-gray-900"} onClick={() => handleAddToCart(id)}>
+        Add to cart
+      </Button>
     </div>
   );
 }
