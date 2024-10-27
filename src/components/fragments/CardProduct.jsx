@@ -10,8 +10,15 @@ CardProduct.Footer = Footer;
 
 function Header({ image }) {
   return (
-    <a href="#" className="inline-block p-2">
-      <img src={image} alt="Product" />
+    <a
+      href="#"
+      className="inline-block p-2"
+    >
+      <img
+        src={image}
+        alt="Product"
+        className="h-52 object-contain mx-auto"
+      />
     </a>
   );
 }
@@ -21,7 +28,7 @@ function Body({ name, children }) {
     <div className="h-full">
       <a href="#">
         <h5 className="text-gray-900 text-lg font-semibold">{name}</h5>
-        <p>{children}</p>
+        <p className="line-clamp-3">{children}</p>
       </a>
     </div>
   );
@@ -30,8 +37,11 @@ function Body({ name, children }) {
 function Footer({ price, handleAddToCart, id }) {
   return (
     <div className="flex justify-between items-center">
-      <p className="text-gray-900 text-lg font-semibold">Rp. {price.toLocaleString("id-ID", { styles: "currency", currency: "IDR" })}</p>
-      <Button classname={"bg-gray-900"} onClick={() => handleAddToCart(id)}>
+      <p className="text-gray-900 text-lg font-semibold">${price.toLocaleString("id-ID", { styles: "currency", currency: "IDR" })}</p>
+      <Button
+        classname={"bg-gray-900"}
+        onClick={() => handleAddToCart(id)}
+      >
         Add to cart
       </Button>
     </div>
