@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import CardProduct from "../components/fragments/CardProduct";
 import Button from "../components/elements/button/Button";
 import { useState } from "react";
@@ -30,6 +30,22 @@ const username = localStorage.getItem("username");
 
 function Products() {
   const [cart, setCart] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    setCart(JSON.parse(localStorage.getItem("cart")) || []);
+  }, []);
+
+  useEffect(() => {
+    if (cart.length > 0) {
+      const total = cart.reduce((acc, curr) => {
+        const product = products.find((product) => product.id === curr.id);
+        return acc + product.price * curr.qty;
+      }, 0);
+      setTotalPrice(total);
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  }, [cart]);
 
   function handleAddToCart(id) {
     if (cart.find((item) => item.id === id)) {
@@ -39,6 +55,23 @@ function Products() {
     }
   }
 
+  // useRef
+  const cartRef = useRef(JSON.parse(localStorage.getItem("cart")) || []);
+
+  function handleAddToCartRef(id) {
+    cartRef.current = [...cartRef.current, { id, qty: 1 }];
+    localStorage.setItem("cart", JSON.stringify(cartRef.current));
+  }
+
+  const totalPriceRef = useRef(null);
+  useEffect(() => {
+    if (cart.length > 0) {
+      totalPriceRef.current.style.display = "table-row";
+    } else {
+      totalPriceRef.current.style.display = "none";
+    }
+  }, [cart]);
+
   return (
     <Fragment>
       <div className="flex gap-5 justify-end py-2 bg-blue-600 text-white items-center pr-10">
@@ -47,7 +80,10 @@ function Products() {
             <p>Hello {username}</p>
           </>
         )}
-        <Button onClick={handleLogout} classname={"bg-black font-bold"}>
+        <Button
+          onClick={handleLogout}
+          classname={"bg-black font-bold"}
+        >
           {username ? "Logout" : "Login"}
         </Button>
       </div>
@@ -57,7 +93,11 @@ function Products() {
             <CardProduct key={product.id}>
               <CardProduct.Header image={product.image} />
               <CardProduct.Body name={product.name}>{product.description}</CardProduct.Body>
-              <CardProduct.Footer price={product.price} handleAddToCart={handleAddToCart} id={product.id} />
+              <CardProduct.Footer
+                price={product.price}
+                handleAddToCart={handleAddToCart}
+                id={product.id}
+              />
             </CardProduct>
           ))}
         </div>
@@ -85,6 +125,14 @@ function Products() {
                   </tr>
                 );
               })}
+              <tr ref={totalPriceRef}>
+                <td colSpan={3}>
+                  <b>Total</b>
+                </td>
+                <td>
+                  <b>Rp. {totalPrice.toLocaleString("id-ID", { styles: "currency", currency: "IDR" })}</b>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
