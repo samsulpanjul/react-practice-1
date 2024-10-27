@@ -3,22 +3,28 @@ import CardProduct from "../components/fragments/CardProduct";
 import Button from "../components/elements/button/Button";
 import { useState } from "react";
 import { getProducts } from "../sevices/products.service";
+import { getUsername } from "../sevices/auth.service";
 
 function handleLogout() {
-  localStorage.removeItem("username");
-  localStorage.removeItem("password");
+  localStorage.removeItem("token");
   window.location.href = "/login";
 }
-
-const username = localStorage.getItem("username");
 
 function Products() {
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [products, setProducts] = useState([]);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     setCart(JSON.parse(localStorage.getItem("cart")) || []);
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      setUsername(getUsername(token));
+    } else {
+      window.location.href = "/login";
+    }
   }, []);
 
   useEffect(() => {
@@ -79,7 +85,7 @@ function Products() {
         </Button>
       </div>
       <div className="flex justify-center gap-5 p-5">
-        <div className="w-3/4 flex flex-wrap gap-5">
+        <div className="w-8/12 flex flex-wrap gap-5">
           {products.length > 0 &&
             products.map((product) => (
               <CardProduct key={product.id}>
