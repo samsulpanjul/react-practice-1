@@ -1,0 +1,41 @@
+import { useEffect, useState } from "react";
+import { useLogin } from "../../hooks/useLogin";
+import Button from "../elements/button/Button";
+import { useSelector } from "react-redux";
+
+const Navbar = () => {
+  const username = useLogin();
+  const [totalCart, setTotalCart] = useState(0);
+  const cart = useSelector((state) => state.cart.data);
+
+  useEffect(() => {
+    const sum = cart.reduce((acc, item) => {
+      return acc + item.qty;
+    }, 0);
+    setTotalCart(sum);
+  }, [cart]);
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  }
+
+  return (
+    <div className="flex gap-5 justify-end py-2 bg-blue-600 text-white items-center pr-10">
+      {username && (
+        <>
+          <p>Hello {username}</p>
+        </>
+      )}
+      <Button
+        onClick={handleLogout}
+        classname={"bg-black font-bold"}
+      >
+        {username ? "Logout" : "Login"}
+      </Button>
+      <div className="flex items-center bg-gray-800 p-2 rounded-md ml-5">{totalCart}</div>
+    </div>
+  );
+};
+
+export default Navbar;

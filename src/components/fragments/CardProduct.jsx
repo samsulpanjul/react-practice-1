@@ -1,4 +1,6 @@
 import Button from "../elements/button/Button";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/slices/cartSlice";
 
 export default function CardProduct({ children }) {
   return <div className="w-full max-w-xs p-3 shadow border border-slate-400 rounded bg-white flex flex-col justify-between gap-3">{children}</div>;
@@ -34,13 +36,14 @@ function Body({ name, children }) {
   );
 }
 
-function Footer({ price, handleAddToCart, id }) {
+function Footer({ price, id }) {
+  const dispatch = useDispatch();
   return (
     <div className="flex justify-between items-center">
       <p className="text-gray-900 text-lg font-semibold">${price.toLocaleString("id-ID", { styles: "currency", currency: "IDR" })}</p>
       <Button
         classname={"bg-gray-900"}
-        onClick={() => handleAddToCart(id)}
+        onClick={() => dispatch(addToCart({ id, qty: 1 }))}
       >
         Add to cart
       </Button>
