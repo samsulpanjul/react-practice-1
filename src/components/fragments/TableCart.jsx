@@ -1,11 +1,15 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { DarkMode } from "../../context/DarkMode";
+import { useTotalPrice, useTotalPriceDispatch } from "../../context/TotalPriceContext";
 
 const TableCart = ({ products }) => {
   const cart = useSelector((state) => state.cart.data);
-  const [totalPrice, setTotalPrice] = useState(0);
+  // const [totalPrice, setTotalPrice] = useState(0);
   const { isDarkMode } = useContext(DarkMode);
+  const dispatch = useTotalPriceDispatch();
+  const { total } = useTotalPrice();
+  const totalPrice = total;
 
   useEffect(() => {
     if (products.length > 0 && cart.length > 0) {
@@ -13,7 +17,12 @@ const TableCart = ({ products }) => {
         const product = products.find((product) => product.id === curr.id);
         return acc + product.price * curr.qty;
       }, 0);
-      setTotalPrice(total);
+      dispatch({
+        type: "UPDATE",
+        payload: {
+          total: total,
+        },
+      });
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart, products]);
