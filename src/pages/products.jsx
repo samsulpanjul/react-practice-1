@@ -1,16 +1,18 @@
-import { Fragment, useEffect, useRef } from "react";
+import { Fragment, useContext, useEffect, useRef } from "react";
 import CardProduct from "../components/fragments/CardProduct";
 import { useState } from "react";
 import { getProducts } from "../sevices/products.service";
 import { useLogin } from "../hooks/useLogin";
 import TableCart from "../components/fragments/TableCart";
 import Navbar from "../components/layouts/Navbar";
+import { DarkMode } from "../context/DarkMode";
 
 function Products() {
   // const [cart, setCart] = useState([]);
   // const [totalPrice, setTotalPrice] = useState(0);
   const [products, setProducts] = useState([]);
   useLogin();
+  const { isDarkMode } = useContext(DarkMode);
 
   // useEffect(() => {
   //   setCart(JSON.parse(localStorage.getItem("cart")) || []);
@@ -33,7 +35,7 @@ function Products() {
   return (
     <Fragment>
       <Navbar />
-      <div className="flex justify-center gap-5 p-5">
+      <div className={`flex justify-center gap-5 p-5 ${isDarkMode && "bg-slate-800"}`}>
         <div className="w-8/12 flex flex-wrap gap-5">
           {products.length > 0 &&
             products.map((product) => (
